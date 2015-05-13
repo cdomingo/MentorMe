@@ -8,17 +8,31 @@
   </head>
   <body>
     <div id="chatWindow">
-      <div id="topbar"></div>
+      <div id="topbar">
+        <div id="finder">
+          <form>
+            <input id="filter" autocomplete="off" placeholder="Enter keywords"/>
+            <button>Send</button>
+          </form>
+        </div>
+        <div id="login">
+          <button id="loginButton">Login</button>
+        </div>
+      </div>
+      
       <div id="messageWindow">
       </div>
-      <div id="userList">
-        <div>test</div>
+      
+      <div id="chatList">
+        <div id="chatHeader">Users</div>
       </div>
-      <div id="roomList">
-        <div>test</div>
+      
+      <div id="chatList">
+        <div id="chatHeader">Rooms</div>
       </div>
+      
       <div id="messageForm">
-        <form action="">
+        <form action="" id="msgForm">
           <input id="m" autocomplete="off" placeholder="Press Enter to send"/><button>Send</button>
         </form>
       </div>
@@ -27,7 +41,7 @@
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script>
       var socket = io();
-      $('form').submit(function(){
+      $('msgForm').submit(function(){
         // send message to server
         socket.emit('message', $('#m').val());
         $('#m').val('');

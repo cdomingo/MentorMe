@@ -32,6 +32,28 @@ body {
   border: 1px solid black;
 }
 
+#finder {
+  display: inline-block;
+  width: 15%;
+  margin-left: 20px;
+  position: relative;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+#login {
+  display: inline-block;
+  float: right;
+  margin-right: 20px;
+  position: relative;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
 #messageWindow {
   height: 76%;
   width: 80%;
@@ -47,18 +69,18 @@ body {
   padding: 5px 10px;
 }
 
-#userList {
+#chatList {
   height: 38%;
   width: 20%;
   border: 1px solid black;
   float: right;
+  overflow-x: scroll;
 }
 
-#roomList {
-  height: 38%;
-  width: 20%;
-  border: 1px solid black;
-  float: right;
+#chatHeader {
+  background-color: gray;
+  width: 100%;
+  font-weight: bold;
 }
 
 #messageForm {
