@@ -53,6 +53,7 @@ body {
 }
 
 #messageWindow {
+  border-right: 5px solid orange;
   height: 76%;
   width: 80%;
   float: left;
@@ -60,14 +61,19 @@ body {
   overflow-x: scroll;
 }
 
+#messageWindow div:nth-child(odd) {
+  background-color: #f0f0f0;
+}
+
 .message {
-  background-color: gray;
+  background-color: #c0c0c0;
   height: 30px;
   width: 100%;
   padding: 5px 10px;
 }
 
 #chatList {
+  background-color: #f0f0f0;
   height: 37.96%;
   width: 20%;
   float: right;
@@ -93,6 +99,7 @@ form {
   width: 100%; 
 }
 form input { 
+  background-color: #f0f0f0;
   border: 0; 
   padding: 10px; 
   width: 100%; 
