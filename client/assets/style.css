@@ -22,14 +22,12 @@ body {
   height: 100%;
   max-width: 100%;
   min-width: 320px;
-  border: 1px solid black;
 }
 
 #topbar {
   height: 12%;
   width: 100%;
   background-color: orange;
-  border: 1px solid black;
 }
 
 #finder {
@@ -72,7 +70,6 @@ body {
 #chatList {
   height: 38%;
   width: 20%;
-  border: 1px solid black;
   float: right;
   overflow-x: scroll;
 }
@@ -88,7 +85,6 @@ body {
   background: orange;
   height: 12%;
   width: 100%;
-  border: 1px solid black;
 }
 
 form { 
