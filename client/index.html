@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+  <head>
+    <title>MentorMe</title>
+    <meta charset="utf-8"/>
+    <link type="text/css" rel="stylesheet" href="assets/style.css"/>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+  </head>
+  <body>
+    <div id="chatWindow">
+      <div id="topbar"></div>
+      <div id="messageWindow">
+      </div>
+      <div id="userList">
+        <div>test</div>
+      </div>
+      <div id="roomList">
+        <div>test</div>
+      </div>
+      <div id="messageForm">
+        <form action="">
+          <input id="m" autocomplete="off" placeholder="Press Enter to send"/><button>Send</button>
+        </form>
+      </div>
+    </div>
+
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script>
+      var socket = io();
+      $('form').submit(function(){
+        // send message to server
+        socket.emit('message', $('#m').val());
+        $('#m').val('');
+        return false;
+      });
+      socket.on('message', function(msg){
+        // add message to the chat
+        var div = $('<div>').attr("class","message");
+        div.text(msg);
+        $('#messageWindow').append(div);
+
+        // pin chat to bottom
+        var objDiv = document.getElementById("messageWindow");
+        objDiv.scrollTop = objDiv.scrollHeight;
+      });
+    </script>
+  </body>
+</html>

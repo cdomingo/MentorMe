@@ -1,0 +1,92 @@
+* { 
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box; 
+}
+
+html {
+  margin: 0;
+  height: 100%;
+}
+
+body { 
+  margin: 0;
+  font: 13px Helvetica, Arial; 
+  height: 100%;
+  width: 100%;
+}
+
+#chatWindow {
+  margin-left: auto;
+  margin-right: auto;
+  height: 100%;
+  max-width: 100%;
+  min-width: 320px;
+  border: 1px solid black;
+}
+
+#topbar {
+  height: 12%;
+  width: 100%;
+  background-color: orange;
+  border: 1px solid black;
+}
+
+#messageWindow {
+  height: 76%;
+  width: 80%;
+  float: left;
+  background-color: #f0f0f0;
+  overflow-x: scroll;
+}
+
+.message {
+  background-color: gray;
+  height: 30px;
+  width: 100%;
+  padding: 5px 10px;
+}
+
+#userList {
+  height: 38%;
+  width: 20%;
+  border: 1px solid black;
+  float: right;
+}
+
+#roomList {
+  height: 38%;
+  width: 20%;
+  border: 1px solid black;
+  float: right;
+}
+
+#messageForm {
+  clear: both;
+  background: orange;
+  height: 12%;
+  width: 100%;
+  border: 1px solid black;
+}
+
+form { 
+  padding: 5px;
+  height: 100%;
+  width: 100%; 
+}
+form input { 
+  border: 0; 
+  padding: 10px; 
+  width: 100%; 
+  height: 100%;
+  margin-right: .5%; 
+  font-size: 12pt;
+}
+form button {
+  display: none;
+  height: 100%;
+  width: 0%; 
+  background: rgb(130, 224, 255); 
+  border: none; 
+  padding: 10px; 
+}
