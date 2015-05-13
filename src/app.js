@@ -1,8 +1,10 @@
-//import libraries
+// import libraries
 var express = require('express'); 
 var path = require('path');
+var passport = require('passport');
+var FacebookStrategy = require('passport-facebook').Strategy;
 
-//initialize app
+// initialize app
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
