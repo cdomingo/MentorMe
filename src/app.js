@@ -1,5 +1,8 @@
 // import libraries
 var express = require('express'); 
+var compression = require('compression'); 
+var cookieParser = require('cookie-parser'); 
+var bodyParser = require('body-parser'); 
 var path = require('path');
 var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
@@ -8,6 +11,11 @@ var FacebookStrategy = require('passport-facebook').Strategy;
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+
+var secrets = require('./secrets.js');
+console.log(secrets);
+
+//console.log('This is the env: ' + env);
 
 app.use('/assets', express.static(path.resolve(__dirname) + '../../client/assets'));
 app.get('/', function(req, res){
