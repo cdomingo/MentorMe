@@ -44,7 +44,17 @@
       <button id="statusButton"><i class="fa fa-times fa-2x"></i></button>
     </div>
 
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+
     <script>
+      'use strict';
+      var username;
+
+      $(document).ready(function(){
+        username = "user" + Math.floor(Math.random() * (10001));
+        console.log(username);
+      });
+
       // This is called with the results from from FB.getLoginStatus().
       function statusChangeCallback(response) {
         console.log('statusChangeCallback');
@@ -64,9 +74,9 @@
         } else {
           // The person is not logged into Facebook, so we're not sure if
           // they are logged into this app or not.
-          document.getElementById('status').innerHTML = 'Please log ' +
-            'into Facebook.';
-          document.getElementById('statusWindow').style.visibility = 'visible';
+          //document.getElementById('status').innerHTML = 'Please log ' +
+            //'into Facebook.';
+          //document.getElementById('statusWindow').style.visibility = 'visible';
         }
       }
 
@@ -126,6 +136,8 @@
             'Thanks for logging in, ' + response.name + '!';
           document.getElementById('statusWindow').style.visibility = 'visible';
 
+          username = response.name;
+
           var newUser = $('<a>').attr("class","user");
           newUser.attr("href", response.link);
           newUser.attr("target", "_blank");
@@ -133,9 +145,7 @@
           $('#userList').append(newUser);
         });
       }
-    </script>
-    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-    <script>
+
       var socket = io();
       $('#msgForm').submit(function(){
         // send message to server
@@ -146,7 +156,7 @@
       socket.on('message', function(msg){
         // add message to the chat
         var div = $('<div>').attr("class","message");
-        div.text(msg);
+        div.text(username + ": " + msg);
         $('#messageWindow').append(div);
 
         // pin chat to bottom
