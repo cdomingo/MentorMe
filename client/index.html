@@ -13,7 +13,7 @@
         <div id="finder">
           <form>
             <input id="filter" autocomplete="off" placeholder="Enter keywords"/>
-            <button>Send</button>
+            <button class="secretButton">Send</button>
           </form>
         </div>
         <div id="login">
@@ -30,11 +30,17 @@
       
       <div id="roomList">
         <div id="chatHeader">Rooms</div>
+        <div id="chatrooms">
+          <a href="#general" class="room">general</a>
+        </div>
+        <form id="roomForm">
+          <input id="roomInput" autocomplete="off" placeholder="Room Name"/><button class="secretButton">Create</button>
+        </form>
       </div>
       
       <div id="messageForm">
         <form action="" id="msgForm">
-          <input id="m" autocomplete="off" placeholder="Press Enter to send"/><button>Send</button>
+          <input id="m" autocomplete="off" placeholder="Press Enter to send"/><button class="secretButton">Send</button>
         </form>
       </div>
     </div>
@@ -49,16 +55,12 @@
     <script>
       'use strict';
       var username;
-
-      $(document).ready(function(){
-        username = "user" + Math.floor(Math.random() * (10001));
-        console.log(username);
-      });
+      var currentRoom = "#general";
 
       // This is called with the results from from FB.getLoginStatus().
       function statusChangeCallback(response) {
         console.log('statusChangeCallback');
-        console.log(response);
+        //console.log(response);
         // The response object is returned with a status field that lets the
         // app know the current login status of the person.
         // Full docs on the response object can be found in the documentation
@@ -138,30 +140,85 @@
 
           username = response.name;
 
-          var newUser = $('<a>').attr("class","user");
-          newUser.attr("href", response.link);
-          newUser.attr("target", "_blank");
-          newUser.text(response.name);
-          $('#userList').append(newUser);
+          socket.emit('FacebookUser', {name: response.name, link: response.link, room: currentRoom});
         });
       }
 
       var socket = io();
+      // sending messages
       $('#msgForm').submit(function(){
         // send message to server
-        socket.emit('message', $('#m').val());
+        socket.emit('message', {user: username, message: $('#m').val(), room: currentRoom});
         $('#m').val('');
         return false;
       });
       socket.on('message', function(msg){
         // add message to the chat
         var div = $('<div>').attr("class","message");
-        div.text(username + ": " + msg);
+        div.text(msg.user + ": " + msg.message);
         $('#messageWindow').append(div);
 
         // pin chat to bottom
         var objDiv = document.getElementById("messageWindow");
         objDiv.scrollTop = objDiv.scrollHeight;
+      });
+
+      // creating new rooms
+      $('#roomForm').submit(function(){
+        // send message to server
+        socket.emit('room', $('#roomInput').val());
+        $('#roomInput').val('');
+        return false;
+      });
+      socket.on('room', function(msg){
+        // add message to the chat
+        var room = $('<a>').attr("class","room");
+        room.text(msg);
+        room.attr("href", "#" + msg);
+        $('#chatrooms').append(room);
+
+        /*var rooms = document.getElementsByClassName('room');
+        for(var i = 0; i = rooms.length; i++) {
+          rooms[i].onclick = function(){
+            room = rooms[i].getAttribute('href');
+            console.log(room);
+
+            socket.emit('joinRoom', {roomName: room, user: username});
+          };
+        };*/
+      });
+
+      // add new users
+      socket.on('newUser', function(msg){
+        var newUser = $('<div>').attr("class","user");
+        newUser.text(msg.name);
+        $('#userList').append(newUser);
+      });
+      socket.on('FacebookUser', function(msg){
+        var newUser = $('<a>').attr("class","user");
+        newUser.attr("href", msg.link);
+        newUser.attr("target", "_blank");
+        newUser.text(msg.name);
+        $('#userList').append(newUser);
+      });
+
+      // wait for html to load
+      $(document).ready(function(){
+        username = "user" + Math.floor(Math.random() * (10001));
+        //console.log(username);
+
+        socket.emit('newUser', {user: username, room: currentRoom});
+
+        // joining new rooms
+        /*var rooms = document.getElementsByClassName('room');
+        for(var i = 0; i = rooms.length; i++) {
+          rooms[i].onclick = function(){
+            room = rooms[i].getAttribute('href');
+            //console.log(room);
+
+            socket.emit('joinRoom', {roomName: room, user: username});
+          };
+        };*/
       });
     </script>
     <script>

@@ -55,13 +55,28 @@ var port = process.env.PORT || process.env.NODE_PORT || 3000;
 // listen for a connection
 io.on('connection', function(socket){
   console.log('a user connected');
+  socket.join('#general');
   // notify server of disconnect
   socket.on('disconnect', function(){
   	console.log('a user disconnected');
   });
+  socket.on('joinRoom', function(msg){
+  	socket.join(msg.roomName);
+  	io.sockets.in(msg.roomName).emit(msg.user + " has joined the room");
+  });
   // notify server of a message and send message to all
   socket.on('message', function(msg){
-    io.emit('message', msg);
+  	//console.log(msg.user);
+    io.sockets.in(msg.room).emit('message', {message: msg.message, user: msg.user});
+  });
+  socket.on('room', function(msg){
+  	io.emit('room', msg);
+  });
+  socket.on('newUser', function(msg){
+  	io.sockets.in(msg.room).emit('newUser', {name: msg.name});
+  });
+  socket.on('FacebookUser', function(msg){
+  	io.sockets.in(msg.room).emit('FacebookUser', {name: msg.name, link: msg.link});
   });
 });
 

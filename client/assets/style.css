@@ -85,15 +85,34 @@ body {
 }
 
 #chatHeader {
+  padding-left: 7.5px;
   background-color: gray;
   width: 100%;
   font-weight: bold;
 }
 
-.user{
+.user, .room{
+  margin-left: 15px;
   font-weight: bold;
   text-decoration: none;
   color: blue;
+  display: block;
+}
+
+#chatrooms {
+  height: 80%;
+  overflow-x: scroll;
+}
+
+#roomForm {
+  height: 9%;
+}
+
+#roomInput {
+  display: inline-block;
+  border: 1px solid black;
+  width: 100%;
+  float: bottom;
 }
 
 #messageForm {
@@ -118,12 +137,15 @@ form input {
   font-size: 12pt;
 }
 form button {
-  display: none;
   height: 100%;
   width: 0%; 
   background: rgb(130, 224, 255); 
   border: none; 
   padding: 10px; 
+}
+
+.secretButton {
+  display: none;
 }
 
 #statusWindow {
