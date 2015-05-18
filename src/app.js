@@ -6,8 +6,6 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var favicon = require('serve-favicon');
 var path = require('path');
-var passport = require('passport');
-var FacebookStrategy = require('passport-facebook').Strategy;
 
 // initialize app
 var app = express();
@@ -28,6 +26,10 @@ app.use(compression());
 app.use(cookieParser());
 app.use(bodyParser());
 
+// variables
+var rooms = [];
+rooms.push("#general");
+
 // Chat
 var port = process.env.PORT || process.env.NODE_PORT || 3000;
 
@@ -35,7 +37,11 @@ var port = process.env.PORT || process.env.NODE_PORT || 3000;
 io.on('connection', function(socket){
   console.log('a user connected');
   socket.on("join", function(data) {
-  	console.log(data.name + 'joins general');
+
+  	//console.log(data.name + 'joins general');
+  		for(var i = 0; i < rooms.length; i++){
+  			socket.emit('room', rooms[i]);
+  		};
 		socket.name = data.name;
 		
 		socket.join('#general');
@@ -50,8 +56,8 @@ io.on('connection', function(socket){
   });
   // need to store list of rooms
   socket.on('joinRoom', function(msg){
-  	socket.join(msg.roomName);
-  	io.sockets.in(msg.roomName).emit(msg.user + " has joined " + msg.roomName);
+  	socket.join(msg.newRoom);
+  	io.sockets.in(msg.newRoom).emit(msg.user + " has joined " + msg.newRoom);
   });
   // notify server of a message and send message to all
   socket.on('message', function(msg){
@@ -60,6 +66,7 @@ io.on('connection', function(socket){
   });
   socket.on('room', function(msg){
   	io.emit('room', msg);
+  	rooms.push(msg);
   });
   // need to store list of users
   socket.on('newUser', function(msg){
