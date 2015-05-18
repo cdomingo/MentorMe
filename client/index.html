@@ -10,12 +10,12 @@
   <body>
     <div id="chatWindow">
       <div id="topbar">
-        <div id="finder">
+        <!--<div id="finder">
           <form>
             <input id="filter" autocomplete="off" placeholder="Enter keywords"/>
             <button class="secretButton">Send</button>
           </form>
-        </div>
+        </div>-->
         <div id="login">
           <fb:login-button size="large" scope="public_profile,email" onlogin="checkLoginState();" autologoutlink="true"></fb:login-button>
         </div>
@@ -216,7 +216,7 @@
       // wait for html to load
       $(document).ready(function(){
         username = "user" + Math.floor(Math.random() * (10001));
-        //console.log(username);
+        console.log(username);
 
         socket.emit('join', {name: username});
         socket.emit('newUser', {user: username, room: currentRoom});
