@@ -163,6 +163,17 @@
         objDiv.scrollTop = objDiv.scrollHeight;
       });
 
+      // receive messages from server
+      socket.on('joinMsg', function(msg){
+        var div = $('<div>').attr("class","message");
+        div.text(msg.name + ": " + msg.msg);
+        $('#messageWindow').append(div);
+
+        // pin chat to bottom
+        var objDiv = document.getElementById("messageWindow");
+        objDiv.scrollTop = objDiv.scrollHeight;
+      });
+
       // creating new rooms
       $('#roomForm').submit(function(){
         // send message to server
@@ -207,6 +218,7 @@
         username = "user" + Math.floor(Math.random() * (10001));
         //console.log(username);
 
+        socket.emit('join', {name: username});
         socket.emit('newUser', {user: username, room: currentRoom});
 
         // joining new rooms
