@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var favicon = require('serve-favicon');
 var path = require('path');
+var mongoose = require('mongoose');
 
 // initialize app
 var app = express();
@@ -27,35 +28,57 @@ app.use(cookieParser());
 app.use(bodyParser());
 
 // variables
+var users = {};
 var rooms = [];
-rooms.push("#general");
+rooms.push("general");
 
 // Chat
 var port = process.env.PORT || process.env.NODE_PORT || 3000;
 
 // listen for a connection
 io.on('connection', function(socket){
-  console.log('a user connected');
+  //console.log('a user connected');
   socket.on("join", function(data) {
 
-  	//console.log(data.name + 'joins general');
+  	console.log(data.name + ' joins general');
+  	
+  	socket.name = data.name;
+	users[socket.name] = socket.name;
+	//console.log(socket.name);
   		for(var i = 0; i < rooms.length; i++){
   			socket.emit('room', rooms[i]);
   		};
-		socket.name = data.name;
+
+
+  		var userKeys = Object.keys(users);
+  		for(var i = 0; i < userKeys.length; i++){
+  			if(socket.name != userKeys[i]){
+  				socket.emit('newUser', {name: userKeys[i]});
+  				//console.log(userKeys[i]);
+  			}
+  		};
+
+  		console.log(users);
 		
-		socket.join('#general');
+		socket.join('general');
 		
-		socket.broadcast.to('#general').emit('joinMsg', { name: 'server', msg: data.name + " has joined the room."} );
+		socket.broadcast.to('general').emit('joinMsg', { name: 'server', msg: data.name + " has joined the room."} );
 		
-		socket.emit('joinMsg', {name: 'server', msg: 'You joined #general'});
+		socket.emit('joinMsg', {name: 'server', msg: 'You joined general'});
 	});
   // notify server of disconnect
-  socket.on('disconnect', function(){
-  	//console.log('a user disconnected');
+  // still kind of broken, doesn't update properly to other clients
+  socket.on('disconnect', function(msg){
+  	delete users[socket.name];
+  	var userKeys = Object.keys(users);
+	for(var i = 0; i < userKeys.length; i++){
+		socket.emit('newUser', {name: userKeys[i]});
+		//console.log(userKeys[i]);
+	};
   });
   // need to store list of rooms
   socket.on('joinRoom', function(msg){
+  	socket.leave(msg.currentRoom);
   	socket.join(msg.newRoom);
   	io.sockets.in(msg.newRoom).emit(msg.user + " has joined " + msg.newRoom);
   });
@@ -65,8 +88,13 @@ io.on('connection', function(socket){
     io.sockets.in(msg.room).emit('message', {message: msg.message, user: msg.user});
   });
   socket.on('room', function(msg){
-  	io.emit('room', msg);
-  	rooms.push(msg);
+  	if(containsObject(msg, rooms) === false){
+  		io.emit('room', msg);
+  		rooms.push(msg);
+  	}
+  	else {
+  		socket.emit('message', {message: "Room already exists!", user: "server"});
+  	}
   });
   // need to store list of users
   socket.on('newUser', function(msg){
@@ -77,6 +105,17 @@ io.on('connection', function(socket){
   	io.sockets.in(msg.room).emit('FacebookUser', {name: msg.name, link: msg.link});
   });
 });
+
+function containsObject(obj, list) {
+    var i;
+    for (i = 0; i < list.length; i++) {
+        if (list[i] === obj) {
+            return true;
+        }
+    }
+
+    return false;
+}
 
 http.listen(port, function(){
   console.log('listening');

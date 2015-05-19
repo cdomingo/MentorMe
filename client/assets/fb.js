@@ -1,6 +1,6 @@
 'use strict';
 var username;
-var currentRoom = "#general";
+var currentRoom = "general";
 
 // This is called with the results from from FB.getLoginStatus().
 function statusChangeCallback(response) {
@@ -179,6 +179,6 @@ $(document).ready(function(){
 
     socket.emit('join', {name: username});
     socket.emit('newUser', {user: username, room: currentRoom});
-
+    
     newRoom();
 }); 
