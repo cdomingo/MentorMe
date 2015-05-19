@@ -13,7 +13,7 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
-var secrets = require('./secrets.js');
+//var secrets = require('./secrets.js');
 
 // app setup
 app.use('/assets', express.static(path.resolve(__dirname) + '../../client/assets'));
@@ -22,7 +22,7 @@ app.get('/', function(req, res){
   var filepath = path.resolve(__dirname + '../../client/index.html');
   res.sendFile(filepath);
 });
-app.use(session({process.env.MY_SECRET || secret: secrets["MY_SECRET"]}));
+//app.use(session({process.env.MY_SECRET || secret: secrets["MY_SECRET"]}));
 app.use(compression());
 app.use(cookieParser());
 app.use(bodyParser());
