@@ -22,7 +22,7 @@ app.get('/', function(req, res){
   var filepath = path.resolve(__dirname + '../../client/index.html');
   res.sendFile(filepath);
 });
-app.use(session({secret: secrets["MY_SECRET"]}));
+app.use(session({process.env.MY_SECRET || secret: secrets["MY_SECRET"]}));
 app.use(compression());
 app.use(cookieParser());
 app.use(bodyParser());
