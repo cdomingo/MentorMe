@@ -4,7 +4,7 @@ var currentRoom = "general";
 
 // This is called with the results from from FB.getLoginStatus().
 function statusChangeCallback(response) {
-  console.log('statusChangeCallback');
+  //console.log('statusChangeCallback');
   //console.log(response);
   // The response object is returned with a status field that lets the
   // app know the current login status of the person.
@@ -19,11 +19,7 @@ function statusChangeCallback(response) {
       'into this app.';
     document.getElementById('statusWindow').style.visibility = 'visible';
   } else {
-    // The person is not logged into Facebook, so we're not sure if
-    // they are logged into this app or not.
-    //document.getElementById('status').innerHTML = 'Please log ' +
-      //'into Facebook.';
-    //document.getElementById('statusWindow').style.visibility = 'visible';
+
   }
 }
 
@@ -37,29 +33,29 @@ function checkLoginState() {
 }
 
 window.fbAsyncInit = function() {
-FB.init({
-  appId      : '358885457635387',
-  cookie     : true,  // enable cookies to allow the server to access 
-                      // the session
-  xfbml      : true,  // parse social plugins on this page
-  version    : 'v2.2' // use version 2.2
-});
+  FB.init({
+    appId      : '358885457635387',
+    cookie     : true,  // enable cookies to allow the server to access 
+                        // the session
+    xfbml      : true,  // parse social plugins on this page
+    version    : 'v2.2' // use version 2.2
+  });
 
-// Now that we've initialized the JavaScript SDK, we call 
-// FB.getLoginStatus().  This function gets the state of the
-// person visiting this page and can return one of three states to
-// the callback you provide.  They can be:
-//
-// 1. Logged into your app ('connected')
-// 2. Logged into Facebook, but not your app ('not_authorized')
-// 3. Not logged into Facebook and can't tell if they are logged into
-//    your app or not.
-//
-// These three cases are handled in the callback function.
+  // Now that we've initialized the JavaScript SDK, we call 
+  // FB.getLoginStatus().  This function gets the state of the
+  // person visiting this page and can return one of three states to
+  // the callback you provide.  They can be:
+  //
+  // 1. Logged into your app ('connected')
+  // 2. Logged into Facebook, but not your app ('not_authorized')
+  // 3. Not logged into Facebook and can't tell if they are logged into
+  //    your app or not.
+  //
+  // These three cases are handled in the callback function.
 
-FB.getLoginStatus(function(response) {
-  statusChangeCallback(response);
-});
+  FB.getLoginStatus(function(response) {
+    statusChangeCallback(response);
+  });
 
 };
 
@@ -77,8 +73,8 @@ FB.getLoginStatus(function(response) {
 function testAPI() {
   console.log('Welcome!  Fetching your information.... ');
   FB.api('/me', function(response) {
-    console.log('Successful login for: ' + response.name);
-    console.log(response);
+    //console.log('Successful login for: ' + response.name);
+    //console.log(response);
     document.getElementById('status').innerHTML =
       'Thanks for logging in, ' + response.name + '!';
     document.getElementById('statusWindow').style.visibility = 'visible';
@@ -133,22 +129,14 @@ socket.on('room', function(msg){
   room.attr("href", "#" + msg);
   $('#chatrooms').append(room);
 
-  /*var rooms = document.getElementsByClassName('room');
-  for(var i = 0; i = rooms.length; i++) {
-    rooms[i].onclick = function(){
-      room = rooms[i].getAttribute('href');
-      console.log(room);
-
-      socket.emit('joinRoom', {roomName: room, user: username});
-    };
-  };*/
+  newRoom();
 });
 
 function newRoom() {
   // joining new rooms
   var rooms = document.getElementsByClassName('room');
   for(var i = 0; i < rooms.length; i++) {
-    console.log(rooms[i]);
+    //console.log(rooms[i]);
     rooms[i].onclick = function(){
       var room = this.hash;
       console.log(room);
@@ -164,6 +152,7 @@ socket.on('newUser', function(msg){
   newUser.text(msg.name);
   $('#userList').append(newUser);
 });
+
 socket.on('FacebookUser', function(msg){
   var newUser = $('<a>').attr("class","user");
   newUser.attr("href", msg.link);
@@ -175,7 +164,7 @@ socket.on('FacebookUser', function(msg){
 // wait for html to load
 $(document).ready(function(){
     username = "mentee" + Math.floor(Math.random() * (10001));
-    console.log(username);
+    //console.log(username);
 
     socket.emit('join', {name: username});
     socket.emit('newUser', {user: username, room: currentRoom});
